@@ -1,15 +1,15 @@
 TARGETS:= example_mti_receive_data example_mti_parse_logfile
-OBJLIBS	= xspublic
-INCLUDE=-I. -Ixspublic
+OBJLIBS	= ../xspublic
+INCLUDE=-I. -I../xspublic
 CFLAGS=-g $(INCLUDE)
 CXXFLAGS=-std=c++11 $(CFLAGS)
-LFLAGS=-Lxspublic/xscontroller -Lxspublic/xscommon -Lxspublic/xstypes -lxscontroller -lxscommon -lxstypes -lpthread -lrt -ldl
+LFLAGS=-L../xspublic/xscontroller -L../xspublic/xscommon -L../xspublic/xstypes -lxscontroller -lxscommon -lxstypes -lpthread -lrt -ldl
 
 .PHONY: $(OBJLIBS)
 all : $(OBJLIBS) $(TARGETS)
 
-xspublic :
-	$(MAKE) -C xspublic $(MFLAGS)
+../xspublic :
+	$(MAKE) -C ../xspublic $(MFLAGS)
 
 example_mti_receive_data: example_mti_receive_data.cpp.o
 example_mti_parse_logfile: example_mti_parse_logfile.cpp.o
@@ -23,9 +23,9 @@ $(TARGETS):
 clean :
 	-$(RM) $(OBJECTS) $(TARGETS)
 	-$(RM) *.o *.d *.dpp
-	-find xspublic/xscontroller -name '*.dpp' -delete
-	-find xspublic/xscommon -name '*.dpp' -delete
-	-find xspublic/xstypes -name '*.dpp' -delete
-	-$(MAKE) -C xspublic/xscontroller $(MFLAGS) clean
-	-$(MAKE) -C xspublic/xscommon $(MFLAGS) clean
-	-$(MAKE) -C xspublic/xstypes $(MFLAGS) clean
+	-find ../xspublic/xscontroller -name '*.dpp' -delete
+	-find ../xspublic/xscommon -name '*.dpp' -delete
+	-find ../xspublic/xstypes -name '*.dpp' -delete
+	-$(MAKE) -C ../xspublic/xscontroller $(MFLAGS) clean
+	-$(MAKE) -C ../xspublic/xscommon $(MFLAGS) clean
+	-$(MAKE) -C ../xspublic/xstypes $(MFLAGS) clean
