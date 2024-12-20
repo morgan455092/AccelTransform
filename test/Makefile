@@ -3,7 +3,7 @@ OBJLIBS	= ../include/xspublic
 INCLUDE=-I. -I../include/xspublic
 CFLAGS=-g $(INCLUDE)
 CXXFLAGS=-std=c++11 $(CFLAGS)
-LFLAGS=-Lxspublic/xscontroller -Lxspublic/xscommon -Lxspublic/xstypes -lxscontroller -lxscommon -lxstypes -lpthread -lrt -ldl
+LFLAGS=-L../include/xspublic/xscontroller -L../include/xspublic/xscommon -L../include/xspublic/xstypes -lxscontroller -lxscommon -lxstypes -lpthread -lrt -ldl
 
 .PHONY: $(OBJLIBS)
 all : $(OBJLIBS) $(TARGETS)
