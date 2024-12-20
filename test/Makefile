@@ -8,7 +8,7 @@ LFLAGS=-L../include/xspublic/xscontroller -L../include/xspublic/xscommon -L../in
 .PHONY: $(OBJLIBS)
 all : $(OBJLIBS) $(TARGETS)
 
-../xspublic :
+../include/xspublic :
 	$(MAKE) -C ../include/xspublic $(MFLAGS)
 
 example_mti_receive_data: example_mti_receive_data.cpp.o
