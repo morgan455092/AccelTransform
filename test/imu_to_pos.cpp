@@ -78,6 +78,7 @@ int main() {
     std::string line;
     double timeStep = 0.01; // Time step in seconds
     std::array<double, 3> cumulativeDisplacement = {0.0, 0.0, 0.0};
+    std::array<double, 3> velocity = {0.0, 0.0, 0.0};
 
     while (std::getline(inputFile, line)) {
         std::istringstream iss(line);
@@ -94,7 +95,8 @@ int main() {
 
             // Calculate step displacement and update cumulative displacement
             for (int i = 0; i < 3; ++i) {
-                double stepDisplacement = (transformedAccel[i] * timeStep * timeStep) / 2.0;
+                velocity[i] += transformedAccel[i] * timeStep;
+                double stepDisplacement = velocity[i]*timeStep + (transformedAccel[i] * timeStep * timeStep) / 2.0;
                 cumulativeDisplacement[i] += stepDisplacement;
             }
         }
