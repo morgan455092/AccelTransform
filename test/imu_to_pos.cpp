@@ -44,6 +44,23 @@ struct Quaternion {
 
         return rotationMatrix;
     }
+
+    // 四元数与四元数相乘
+    Quaternion operator*(const Quaternion& other) const {
+        return {
+            w * other.w - x * other.x - y * other.y - z * other.z,
+            w * other.x + x * other.w + y * other.z - z * other.y,
+            w * other.y - x * other.z + y * other.w + z * other.x,
+            w * other.z + x * other.y - y * other.x + z * other.w
+        };
+    }
+
+    // 将四元数作用在一个向量上 (旋转操作)
+    std::array<double, 3> rotateVector(const std::array<double, 3>& vec) const {
+        Quaternion vecQuat{0, vec[0], vec[1], vec[2]};
+        Quaternion result = (*this * vecQuat) * this->conjugate();
+        return {result.x, result.y, result.z};
+    }
 };
 
 // Transform acceleration using the rotation matrix
@@ -83,15 +100,21 @@ int main() {
     while (std::getline(inputFile, line)) {
         std::istringstream iss(line);
         Quaternion q;
+
+        // Body Frame 下测得的加速度
         std::array<double, 3> accel;
+
         char delimiter;
         if (iss >> q.w >> delimiter >> q.x >> delimiter >> q.y >> delimiter >> q.z >> delimiter
                 >> accel[0] >> delimiter >> accel[1] >> delimiter >> accel[2]) {
             // Normalize quaternion
             q.normalize();
-            Quaternion qConjugate = q.conjugate();
-            auto rotationMatrix = qConjugate.toRotationMatrix();
-            auto transformedAccel = transformAcceleration(accel, rotationMatrix);
+            //Quaternion qConjugate = q.conjugate();
+            //auto rotationMatrix = qConjugate.toRotationMatrix();
+            //auto transformedAccel = transformAcceleration(accel, rotationMatrix);
+
+            // 转换到 Global Frame
+            std::array<double, 3> transformedAccel = q.conjugate().rotateVector(accel);
 
             // Calculate step displacement and update cumulative displacement
             for (int i = 0; i < 3; ++i) {
