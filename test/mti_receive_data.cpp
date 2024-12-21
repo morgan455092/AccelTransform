@@ -352,15 +352,15 @@ int main(void)
 				cout << " |q0:" << quaternion.w()
 					<< ", q1:" << quaternion.x()
 					<< ", q2:" << quaternion.y()
-					<< ", q3:" << quaternion.z();
+					<< ", q3:" << quaternion.z() << std::endl;
 				appendToCSV(filePath,
 							quaternion.w(),
 							quaternion.x(),
 							quaternion.y(),
 							quaternion.z(),
 							free_acc[0],
-							free_acc[2],
-							free_acc[1]
+							free_acc[1],
+							free_acc[2]
 							);
 			}
 			

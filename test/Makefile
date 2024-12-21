@@ -1,4 +1,4 @@
-TARGETS:= example_mti_receive_data
+TARGETS:= mti_receive_data
 OBJLIBS	= ../include/xspublic
 INCLUDE=-I. -I../include/xspublic
 CFLAGS=-g $(INCLUDE)
@@ -11,7 +11,7 @@ all : $(OBJLIBS) $(TARGETS)
 ../include/xspublic :
 	$(MAKE) -C ../include/xspublic $(MFLAGS)
 
-example_mti_receive_data: example_mti_receive_data.cpp.o
+mti_receive_data: mti_receive_data.cpp.o
 
 $(TARGETS):
 	$(CXX) $(CFLAGS) $(INCLUDE) $^ -o $@ $(LFLAGS)
