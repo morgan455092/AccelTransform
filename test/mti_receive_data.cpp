@@ -45,6 +45,7 @@
 #include <iomanip>
 #include <list>
 #include <string>
+#include <fstream>
 
 Journaller* gJournal = 0;
 
@@ -98,6 +99,42 @@ private:
 	size_t m_numberOfPacketsInBuffer;
 	list<XsDataPacket> m_packetBuffer;
 };
+
+
+// 函數：將六個參數追加寫入 CSV 檔案
+void appendToCSV(const std::string& filePath, 
+                 float param1, 
+                 float param2, 
+                 float param3, 
+                 float param4, 
+                 float param5, 
+                 float param6,
+				 float param7) {
+    // 開啟文件，以追加模式 (std::ios::app)
+    std::ofstream file(filePath, std::ios::app);
+
+    // 確保文件成功打開
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open file " << filePath << std::endl;
+        return;
+    }
+
+    // 設定浮點數格式
+    file << std::fixed << std::setprecision(2);
+
+    // 將參數寫入文件，以逗號分隔
+    file << param1 << "," 
+         << param2 << "," 
+         << param3 << "," 
+         << param4 << "," 
+         << param5 << "," 
+		 << param6 << "," 
+         << param7 << "\n";
+
+    // 關閉文件
+    file.close();
+}
+
 
 //--------------------------------------------------------------------------------
 int main(void)
@@ -219,6 +256,10 @@ int main(void)
 	
 
 	int64_t startTime = XsTime::timeStampNow();
+
+    std::string filePath = "output.csv";
+
+
 	while (XsTime::timeStampNow() - startTime <= timeToRun)
 	{
 		if (callback.packetAvailable())
@@ -227,11 +268,13 @@ int main(void)
 
 			// Retrieve a packet
 			XsDataPacket packet = callback.getNextPacket();
+
+/*
 			if (packet.containsSampleTimeFine())
 			{
 				uint32_t sampleTimeFine = packet.sampleTimeFine();
 				cout << "\r"
-					<< "SampleTine:" << sampleTimeFine;
+					<< "SampleTime:" << sampleTimeFine;
 			}
 
 			if (packet.containsCalibratedData())
@@ -258,7 +301,6 @@ int main(void)
 				cout << " |free_acc X:" << free_acc[0]
 					<< ", free_acc Y:" << free_acc[1]
 					<< ", free_acc Z:" << free_acc[2];
-
 			}
 
 			if (packet.containsOrientation())
@@ -297,6 +339,29 @@ int main(void)
 			{
 				uint32_t status = packet.status();
 				cout << " |Status: " << status << endl;
+			}
+*/
+			if (packet.containsFreeAcceleration() && packet.containsOrientation()){
+
+				XsVector free_acc = packet.freeAcceleration();
+				cout << " |free_acc X:" << free_acc[0]
+					<< ", free_acc Y:" << free_acc[1]
+					<< ", free_acc Z:" << free_acc[2];
+				
+				XsQuaternion quaternion = packet.orientationQuaternion();
+				cout << " |q0:" << quaternion.w()
+					<< ", q1:" << quaternion.x()
+					<< ", q2:" << quaternion.y()
+					<< ", q3:" << quaternion.z();
+				appendToCSV(filePath,
+							quaternion.w(),
+							quaternion.x(),
+							quaternion.y(),
+							quaternion.z(),
+							free_acc[0],
+							free_acc[2],
+							free_acc[1]
+							);
 			}
 			
 			cout << flush;

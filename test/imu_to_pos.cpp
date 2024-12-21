@@ -61,9 +61,15 @@ std::array<double, 3> transformAcceleration(
     return transformedAcceleration;
 }
 
+// 計算總位移的函數
+double calculateDisplacement(double x, double y, double z) {
+    return std::sqrt(x * x + y * y + z * z);
+}
+
+
 int main() {
     // Read quaternion and acceleration from CSV file
-    std::ifstream inputFile("data.csv");
+    std::ifstream inputFile("output.csv");
     if (!inputFile.is_open()) {
         std::cerr << "Failed to open file" << std::endl;
         return 1;
@@ -96,11 +102,16 @@ int main() {
 
     inputFile.close();
 
+    double total_Displacement = calculateDisplacement(cumulativeDisplacement[0],cumulativeDisplacement[1],cumulativeDisplacement[2]);
+
     // Output cumulative displacement
     std::cout << "Cumulative Displacement: ["
               << cumulativeDisplacement[0] << ", "
               << cumulativeDisplacement[1] << ", "
               << cumulativeDisplacement[2] << "]" << std::endl;
+
+    std::cout << "Total Displacement: "
+              << total_Displacement << std::endl;
 
     return 0;
 }
